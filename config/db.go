@@ -12,7 +12,7 @@ func ConnectDatabase() *gorm.DB {
 	var db *gorm.DB
 	var err error
 
-	dsn := utils.Getenv("DATABASE_URL", "postgres://postgres:password@127.0.0.1:5432/sctrans")
+	dsn := utils.Getenv("DATABASE_URL", "postgres://postgres:password@localhost:5432/sctrans")
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {

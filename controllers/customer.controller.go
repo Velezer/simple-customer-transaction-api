@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"sctrans/httperror"
 	"sctrans/models"
@@ -33,8 +35,8 @@ func (a CustomerController) CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	if _, err := services.CustomerService.FindByName(input.Name); err != nil {
-		c.Error(err).SetMeta(httperror.NewMeta(http.StatusConflict))
+	if found, _ := services.CustomerService.FindByName(input.Name); found != nil {
+		c.Error(errors.New(fmt.Sprintf("customer with name '%s' already exist", input.Name))).SetMeta(httperror.NewMeta(http.StatusConflict))
 		return
 	}
 
@@ -63,6 +65,7 @@ type AddAddressInput struct {
 // @Summary      AddAddressCustomer.
 // @Description  AddAddressCustomer.
 // @Tags         Customer
+// @Param id path string true "customer id"
 // @Param        Body  body  AddAddressInput  true  "the body to AddAddressCustomer"
 // @Produce      json
 // @Success      200  {object}  models._Res{data=map[string]string}

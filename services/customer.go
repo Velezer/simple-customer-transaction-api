@@ -28,7 +28,7 @@ func (s customer) FindByName(n string) (u *models.Customer, err error) {
 	return u, nil
 }
 func (s customer) FindAll() (u *[]models.Customer, err error) {
-	err = s.Db.First(&u).Error
+	err = s.Db.Preload("CustomerAddresses").Find(&u).Error
 	return
 }
 

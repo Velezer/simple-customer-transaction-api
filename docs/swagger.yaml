@@ -62,12 +62,12 @@ definitions:
     type: object
   models.Customer:
     properties:
-      customer_name:
-        type: string
-      customerAddresses:
+      customer_addresses:
         items:
           $ref: '#/definitions/models.CustomerAddress'
         type: array
+      customer_name:
+        type: string
       id:
         type: integer
     type: object
@@ -183,6 +183,11 @@ paths:
     post:
       description: AddAddressCustomer.
       parameters:
+      - description: customer id
+        in: path
+        name: id
+        required: true
+        type: string
       - description: the body to AddAddressCustomer
         in: body
         name: Body

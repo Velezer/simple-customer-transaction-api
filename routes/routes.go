@@ -16,6 +16,7 @@ func SetupRouter() *gin.Engine {
 	r.Use(middlewares.ErrorMiddleware())
 
 	customerController := controllers.CustomerController{}
+	r.GET("/customers", customerController.GetCustomers)
 	r.POST("/customers", customerController.CreateCustomer)
 	r.POST("/customers/:id", customerController.AddAddressCustomer)
 

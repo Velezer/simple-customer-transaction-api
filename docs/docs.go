@@ -128,6 +128,13 @@ const docTemplate = `{
                 "summary": "AddAddressCustomer.",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "customer id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "the body to AddAddressCustomer",
                         "name": "Body",
                         "in": "body",
@@ -532,7 +539,7 @@ const docTemplate = `{
         "models.Customer": {
             "type": "object",
             "properties": {
-                "customerAddresses": {
+                "customer_addresses": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.CustomerAddress"

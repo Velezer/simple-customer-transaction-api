@@ -5,6 +5,6 @@ type CustomerAddress struct {
 
 	Address string `json:"address" gorm:"not null;unique"`
 
-	CustomerId uint     `json:"customer_id" gorm:"not null"`
+	CustomerId uint     `json:"-" gorm:"not null"`
 	Customer   Customer `json:"-"`
 }
