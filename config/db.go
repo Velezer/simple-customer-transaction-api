@@ -19,6 +19,13 @@ func ConnectDatabase() *gorm.DB {
 		panic(err.Error())
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err.Error())
+	}
+	sqlDB.SetMaxIdleConns(1)
+	sqlDB.SetMaxOpenConns(4)
+
 	db.AutoMigrate(
 		&models.Customer{},
 		&models.CustomerAddress{},
