@@ -63,7 +63,7 @@ type AddAddressInput struct {
 // @Summary      AddAddressCustomer.
 // @Description  AddAddressCustomer.
 // @Tags         Customer
-// @Param        Body  body  RegisterInput  true  "the body to AddAddressCustomer"
+// @Param        Body  body  AddAddressInput  true  "the body to AddAddressCustomer"
 // @Produce      json
 // @Success      200  {object}  models._Res{data=map[string]string}
 // @Success      400  {object}  models._Err

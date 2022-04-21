@@ -19,8 +19,8 @@ func (s order) Save(m *models.Order) (*models.Order, error) {
 	return m, nil
 }
 
-func (s order) FindById(id uint) (m *models.Order, err error) {
-	err = s.Db.First(&m, id).Error
+func (s order) FindAll() (ms *[]models.Order, err error) {
+	err = s.Db.Find(&ms).Error
 	if err != nil {
 		return nil, err
 	}

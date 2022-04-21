@@ -7,15 +7,14 @@ import (
 	"sctrans/services"
 
 	"github.com/gin-gonic/gin"
-	"github.com/shopspring/decimal"
 )
 
 type ProductController struct {
 }
 
 type ProductInput struct {
-	Name  int             `json:"name" binding:"required"`
-	Price decimal.Decimal `json:"price" binding:"required"`
+	Name  string  `json:"name" binding:"required"`
+	Price float64 `json:"price" binding:"required"`
 }
 
 // CreateProduct godoc

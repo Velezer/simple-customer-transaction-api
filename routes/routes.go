@@ -16,8 +16,11 @@ func SetupRouter() *gin.Engine {
 
 	r.POST("/customers")
 
-	r.GET("/orders")
-	r.POST("/orders")
+	r.GET("/products")
+	r.POST("/products")
+
+	r.GET("/payment-methods")
+	r.POST("/payment-methods")
 
 	r.GET("/orders")
 	r.POST("/orders")

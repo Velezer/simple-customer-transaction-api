@@ -13,11 +13,11 @@ type productIface interface {
 	Save(s *models.Product) (*models.Product, error)
 }
 type paymentMethodIface interface {
-	FindAll(id uint) (ps *[]models.PaymentMethod, err error)
+	FindAll() (ps *[]models.PaymentMethod, err error)
 	Save(s *models.PaymentMethod) (*models.PaymentMethod, error)
 }
 
 type orderIface interface {
-	FindById(id uint) (*models.Order, error)
+	FindAll() (*[]models.Order, error)
 	Save(m *models.Order) (*models.Order, error)
 }

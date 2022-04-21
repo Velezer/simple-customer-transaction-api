@@ -1,10 +1,8 @@
 package models
 
-import "github.com/shopspring/decimal"
-
 type Product struct {
 	BaseModel
 
-	Name  int             `json:"name"`
-	Price decimal.Decimal `json:"price" gorm:"type:decimal"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price" gorm:"type:decimal(16,2)"`
 }

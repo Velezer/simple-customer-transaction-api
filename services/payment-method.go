@@ -19,7 +19,7 @@ func (s paymentMethod) Save(m *models.PaymentMethod) (*models.PaymentMethod, err
 	return m, nil
 }
 
-func (s paymentMethod) FindAll(id uint) (ps *[]models.PaymentMethod, err error) {
+func (s paymentMethod) FindAll() (ps *[]models.PaymentMethod, err error) {
 	err = s.Db.Find(&ps).Error
 	if err != nil {
 		return nil, err
