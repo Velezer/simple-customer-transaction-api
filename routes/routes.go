@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"sctrans/controllers"
 	"sctrans/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -14,16 +15,21 @@ var r *gin.Engine = gin.Default()
 func SetupRouter() *gin.Engine {
 	r.Use(middlewares.ErrorMiddleware())
 
-	r.POST("/customers")
+	customerController := controllers.CustomerController{}
+	r.POST("/customers", customerController.CreateCustomer)
+	r.POST("/customers/:id", customerController.AddAddressCustomer)
 
-	r.GET("/products")
-	r.POST("/products")
+	productController := controllers.ProductController{}
+	r.GET("/products", productController.GetProducts)
+	r.POST("/products", productController.CreateProduct)
 
-	r.GET("/payment-methods")
-	r.POST("/payment-methods")
+	paymentMethodController := controllers.PaymentMethodController{}
+	r.GET("/payment-methods", paymentMethodController.GetPaymentMethods)
+	r.POST("/payment-methods", paymentMethodController.GetPaymentMethods)
 
-	r.GET("/orders")
-	r.POST("/orders")
+	orderMethodController := controllers.OrderController{}
+	r.GET("/orders", orderMethodController.GetOrders)
+	r.POST("/orders", orderMethodController.CreateOrder)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
