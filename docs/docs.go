@@ -559,9 +559,6 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
-                "customer_id": {
-                    "type": "integer"
-                },
                 "id": {
                     "type": "integer"
                 }
@@ -570,9 +567,6 @@ const docTemplate = `{
         "models.Order": {
             "type": "object",
             "properties": {
-                "customerAddress": {
-                    "$ref": "#/definitions/models.CustomerAddress"
-                },
                 "customer_address_id": {
                     "type": "integer"
                 },
@@ -600,7 +594,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "is_active": {
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"

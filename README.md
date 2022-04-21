@@ -1,4 +1,4 @@
 # Docs
 Swagger UI: https://sctrans.herokuapp.com/swagger/index.html
 
-![alt text](https://github.com/Velezer/[reponame]/blob/[branch]/image.jpg?raw=true)
+![db design](https://github.com/Velezer/simple-customer-transaction-api/blob/main/sctrans.db.design.png?raw=true)

@@ -75,8 +75,6 @@ definitions:
     properties:
       address:
         type: string
-      customer_id:
-        type: integer
       id:
         type: integer
     type: object
@@ -84,8 +82,6 @@ definitions:
     properties:
       customer_address_id:
         type: integer
-      customerAddress:
-        $ref: '#/definitions/models.CustomerAddress'
       id:
         type: integer
       payment_methods:
@@ -102,7 +98,7 @@ definitions:
       id:
         type: integer
       is_active:
-        type: boolean
+        type: integer
       name:
         type: string
     type: object

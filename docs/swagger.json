@@ -547,9 +547,6 @@
                 "address": {
                     "type": "string"
                 },
-                "customer_id": {
-                    "type": "integer"
-                },
                 "id": {
                     "type": "integer"
                 }
@@ -558,9 +555,6 @@
         "models.Order": {
             "type": "object",
             "properties": {
-                "customerAddress": {
-                    "$ref": "#/definitions/models.CustomerAddress"
-                },
                 "customer_address_id": {
                     "type": "integer"
                 },
@@ -588,7 +582,7 @@
                     "type": "integer"
                 },
                 "is_active": {
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
