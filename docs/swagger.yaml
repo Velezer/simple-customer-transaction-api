@@ -1,0 +1,1432 @@
+definitions:
+  controllers.CartInput:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  controllers.CartItemInput:
+    properties:
+      count:
+        minimum: 0
+        type: integer
+      product_id:
+        type: integer
+    required:
+    - product_id
+    type: object
+  controllers.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.OrderInput:
+    properties:
+      cart_id:
+        type: integer
+    required:
+    - cart_id
+    type: object
+  controllers.ProductInput:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+      count:
+        type: integer
+      description:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      store_id:
+        type: integer
+    required:
+    - categories
+    - count
+    - description
+    - image_url
+    - name
+    - price
+    - store_id
+    type: object
+  controllers.RegisterInput:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      role:
+        enum:
+        - USER
+        - MERCHANT
+        type: string
+      username:
+        type: string
+    required:
+    - address
+    - email
+    - password
+    - role
+    - username
+    type: object
+  controllers.StoreInput:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    required:
+    - address
+    - description
+    - image_url
+    - name
+    type: object
+  controllers.changePasswordInput:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
+  controllers.updateProductInput:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+      count:
+        type: integer
+      description:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+    required:
+    - categories
+    - count
+    - description
+    - image_url
+    - name
+    - price
+    type: object
+  controllers.updateStatusOrderInput:
+    properties:
+      status:
+        enum:
+        - CANCELLED
+        - PAID
+        - SHIPPING
+        - DELIVERED
+        type: string
+    required:
+    - status
+    type: object
+  controllers.updateUser:
+    properties:
+      address:
+        type: string
+      email:
+        description: gin binding is email but not required
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models._Err:
+    properties:
+      error:
+        type: string
+    type: object
+  models._Res:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Cart:
+    properties:
+      cart_items:
+        items:
+          $ref: '#/definitions/models.CartItem'
+        type: array
+      id:
+        type: integer
+      is_checkout:
+        type: boolean
+      name:
+        type: string
+      total_price:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.CartItem:
+    properties:
+      count:
+        type: integer
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/models.Product'
+      product_id:
+        type: integer
+    type: object
+  models.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Order:
+    properties:
+      cart_id:
+        type: integer
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/models.OrderStatus'
+      status_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.OrderStatus:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/models.Category'
+        type: array
+      count:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      store_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.Store:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      user_id:
+        type: integer
+    type: object
+info:
+  contact:
+    email: asvelezer@gmail.com
+    name: Arief Syaifuddin
+    url: https://github.com/Velezer
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /carts:
+    get:
+      description: get user's carts with status is_checkout = false
+      parameters:
+      - default: false
+        description: filter by is_checkout. if false or not set will return both false
+          and true
+        in: query
+        name: is_checkout
+        type: boolean
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: get carts, user role must be USER
+      tags:
+      - Cart
+    post:
+      description: create cart
+      parameters:
+      - description: the body to create a Cart
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CartInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Cart'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Create Cart, user role must be USER
+      tags:
+      - Cart
+  /carts/{id}:
+    delete:
+      description: delete cart
+      parameters:
+      - description: cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Cart'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: delete cart, user role must be USER and must own the cart
+      tags:
+      - Cart
+    get:
+      description: get user's cart with specific id
+      parameters:
+      - description: cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Cart'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: get carts, user role must be USER
+      tags:
+      - Cart
+    put:
+      description: update cart name
+      parameters:
+      - description: cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update a Cart
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CartInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Cart'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: update cart, user role must be USER and must own the cart
+      tags:
+      - Cart
+  /carts/{id}/items:
+    put:
+      description: will insert if not exist (based on product_id), will update the
+        count if exist, will delete if count is 0
+      parameters:
+      - description: cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to add a cart item
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CartItemInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: add item || update count || delete item, user role must be USER and
+        must own the cart
+      tags:
+      - Cart
+  /orders:
+    get:
+      description: get orders will check the role and show related orders
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Order'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: get Orders for user and merchant based on jwt
+      tags:
+      - Order
+    post:
+      description: create order
+      parameters:
+      - description: the body to create a Order
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.OrderInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Order'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Create Order, user role must be USER
+      tags:
+      - Order
+  /orders/{id}:
+    delete:
+      description: delete order, only cancelled order can be deleted
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models._Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: delete Order, user role must be MERCHANT
+      tags:
+      - Order
+    get:
+      description: get order
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Order'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: get Order based on jwt
+      tags:
+      - Order
+    put:
+      description: you can go right or left, but you can't revert. the starting point
+        is UNPAID. ||| CANCELLED <- UNPAID -> PAID -> SHIPPING -> DELIVERED |||
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to delete a Order
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateStatusOrderInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Order'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: update status Order, user role must be MERCHANT
+      tags:
+      - Order
+  /products:
+    get:
+      description: get products
+      parameters:
+      - collectionFormat: multi
+        description: filter by categories
+        in: query
+        items:
+          type: string
+        name: categories
+        type: array
+      - description: filter by keyword
+        in: query
+        name: keyword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Product'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: get products, anyone can access
+      tags:
+      - Product
+    post:
+      description: create product
+      parameters:
+      - description: the body to create a Product
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ProductInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Create Product, user role must be MERCHANT
+      tags:
+      - Product
+  /products/{id}:
+    delete:
+      description: delete product
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models._Res'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: delete product, user role must be MERCHANT
+      tags:
+      - Product
+    get:
+      description: get product by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Product'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: get product, anyone can access
+      tags:
+      - Product
+    put:
+      description: update  product
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update a Product
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateProductInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Update Product, user role must be MERCHANT
+      tags:
+      - Product
+  /stores:
+    get:
+      description: get stores
+      parameters:
+      - description: filter by keyword
+        in: query
+        name: keyword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Store'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: get stores, anyone can use this
+      tags:
+      - Store
+    post:
+      description: Create Store
+      parameters:
+      - description: the body to create a Store
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.StoreInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Store'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Create Store, user role must be MERCHANT
+      tags:
+      - Store
+  /stores/{id}:
+    delete:
+      description: delete store
+      parameters:
+      - description: store id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models._Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: delete Store, user role must be MERCHANT and must own the store
+      tags:
+      - Store
+    get:
+      description: get store by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Store'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: get store, anyone can use this
+      tags:
+      - Store
+    put:
+      description: update store
+      parameters:
+      - description: store id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update a Store
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.StoreInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Store'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: Update Store, user role must be MERCHANT and must own the store
+      tags:
+      - Store
+  /user:
+    delete:
+      description: delete user
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models._Res'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: delete user based on jwt
+      tags:
+      - User
+    get:
+      description: get user
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: get user
+      tags:
+      - User
+    post:
+      description: registering a user from public access.
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: Register a user.
+      tags:
+      - User
+    put:
+      description: update user info but can't change the role
+      parameters:
+      - description: the body to update a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateUser'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: update user info
+      tags:
+      - User
+  /user/login:
+    post:
+      description: Logging in to get jwt token to access api by user's role.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: Login as as user.
+      tags:
+      - User
+  /user/password:
+    put:
+      description: change user's password
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.changePasswordInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models._Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models._Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models._Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      security:
+      - BearerToken: []
+      summary: change user's password
+      tags:
+      - User
+swagger: "2.0"
