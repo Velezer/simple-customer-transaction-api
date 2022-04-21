@@ -36,7 +36,7 @@ func (h PaymentMethodController) CreatePaymentMethod(c *gin.Context) {
 
 	m := models.PaymentMethod{}
 	m.Name = input.Name
-	m.IsActive = true
+	m.IsActive = 1	
 
 	savedPaymentMethod, err := services.PaymentMethodService.Save(&m)
 	if err != nil {

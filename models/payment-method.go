@@ -4,5 +4,5 @@ type PaymentMethod struct {
 	BaseModel
 
 	Name     string `json:"name"`
-	IsActive bool   `json:"is_active" gorm:"tinyint(1)"`
+	IsActive int    `json:"is_active" gorm:"tinyint(1)"`
 }

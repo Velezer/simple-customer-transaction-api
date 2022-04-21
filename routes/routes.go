@@ -26,7 +26,7 @@ func SetupRouter() *gin.Engine {
 
 	paymentMethodController := controllers.PaymentMethodController{}
 	r.GET("/payment-methods", paymentMethodController.GetPaymentMethods)
-	r.POST("/payment-methods", paymentMethodController.GetPaymentMethods)
+	r.POST("/payment-methods", paymentMethodController.CreatePaymentMethod)
 
 	orderMethodController := controllers.OrderController{}
 	r.GET("/orders", orderMethodController.GetOrders)
