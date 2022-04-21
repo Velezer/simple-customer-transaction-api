@@ -27,3 +27,12 @@ func (s paymentMethod) FindAll() (ps *[]models.PaymentMethod, err error) {
 
 	return
 }
+
+func (s paymentMethod) FindById(id uint) (p *models.PaymentMethod, err error) {
+	err = s.Db.First(&p).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}

@@ -5,6 +5,7 @@ import (
 	"sctrans/httperror"
 	"sctrans/models"
 	"sctrans/services"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +40,26 @@ func (h OrderController) CreateOrder(c *gin.Context) {
 
 	m := models.Order{}
 	m.CustomerAddressID = input.CustomerAddressID
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		for _, pid := range input.ProductIDs {
+			p, _ := services.ProductService.FindById(pid)
+			m.Products = append(m.Products, *p)
+		}
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go func() {
+		for _, pmid := range input.PaymentMethodIDs {
+			p, _ := services.PaymentMethodService.FindById(pmid)
+			m.PaymentMethods = append(m.PaymentMethods, *p)
+		}
+		wg.Done()
+	}()
+	wg.Wait()
 
 	savedOrder, err := services.OrderService.Save(&m)
 	if err != nil {

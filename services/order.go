@@ -11,7 +11,7 @@ type order struct {
 }
 
 func (s order) Save(m *models.Order) (*models.Order, error) {
-	err := s.Db.Create(&m).Error
+	err := s.Db.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&m).Error
 	if err != nil {
 		return nil, err
 	}
