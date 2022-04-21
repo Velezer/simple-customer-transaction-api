@@ -60,6 +60,17 @@ definitions:
       message:
         type: string
     type: object
+  models.Customer:
+    properties:
+      customer_name:
+        type: string
+      customerAddresses:
+        items:
+          $ref: '#/definitions/models.CustomerAddress'
+        type: array
+      id:
+        type: integer
+    type: object
   models.CustomerAddress:
     properties:
       address:
@@ -115,6 +126,29 @@ info:
   termsOfService: http://swagger.io/terms/
 paths:
   /customers:
+    get:
+      description: get customers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models._Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Customer'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models._Err'
+      summary: get customers
+      tags:
+      - Customer
     post:
       description: CreateCustomer.
       parameters:
@@ -197,7 +231,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: get Orders, anyone can access
+      summary: get Orders
       tags:
       - Order
     post:
@@ -229,7 +263,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: Create Order, user role must be MERCHANT
+      summary: Create Order
       tags:
       - Order
   /payment-methods:
@@ -253,7 +287,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: get PaymentMethods, anyone can access
+      summary: get PaymentMethods
       tags:
       - PaymentMethod
     post:
@@ -285,7 +319,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: Create PaymentMethod, user role must be MERCHANT
+      summary: Create PaymentMethod
       tags:
       - PaymentMethod
   /products:
@@ -309,7 +343,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: get products, anyone can access
+      summary: get products
       tags:
       - Product
     post:
@@ -341,7 +375,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models._Err'
-      summary: Create Product, user role must be MERCHANT
+      summary: Create Product
       tags:
       - Product
 swagger: "2.0"

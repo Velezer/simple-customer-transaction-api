@@ -18,7 +18,7 @@ type ProductInput struct {
 }
 
 // CreateProduct godoc
-// @Summary      Create Product, user role must be MERCHANT
+// @Summary      Create Product
 // @Description  create product
 // @Tags         Product
 // @Param        Body  body  ProductInput  true  "the body to create a Product"
@@ -49,7 +49,7 @@ func (h ProductController) CreateProduct(c *gin.Context) {
 }
 
 // GetProducts godoc
-// @Summary      get products, anyone can access
+// @Summary      get products
 // @Description  get products
 // @Tags         Product
 // @Produce      json

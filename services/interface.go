@@ -6,6 +6,7 @@ type customerIface interface {
 	Save(u *models.Customer) (*models.Customer, error)
 	AddAddress(id uint, a string) error
 	FindByName(n string) (u *models.Customer, err error)
+	FindAll() (u *[]models.Customer, err error)
 }
 
 type productIface interface {

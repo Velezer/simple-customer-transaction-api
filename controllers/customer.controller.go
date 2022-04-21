@@ -96,3 +96,21 @@ func (a CustomerController) AddAddressCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "success", "data": Customer})
 
 }
+
+// GetCustomers godoc
+// @Summary      get customers
+// @Description  get customers
+// @Tags         Customer
+// @Produce      json
+// @Success      200  {object}  models._Res{data=[]models.Customer}
+// @Success      500  {object}  models._Err
+// @Router       /customers [get]
+func (h CustomerController) GetCustomers(c *gin.Context) {
+	customers, err := services.CustomerService.FindAll()
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "success", "data": customers})
+}

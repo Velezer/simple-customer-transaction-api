@@ -17,7 +17,7 @@ type PaymentMethodInput struct {
 }
 
 // CreatePaymentMethod godoc
-// @Summary      Create PaymentMethod, user role must be MERCHANT
+// @Summary      Create PaymentMethod
 // @Description  create PaymentMethod
 // @Tags         PaymentMethod
 // @Param        Body  body  PaymentMethodInput  true  "the body to create a PaymentMethod"
@@ -48,7 +48,7 @@ func (h PaymentMethodController) CreatePaymentMethod(c *gin.Context) {
 }
 
 // GetPaymentMethods godoc
-// @Summary      get PaymentMethods, anyone can access
+// @Summary      get PaymentMethods
 // @Description  get PaymentMethods
 // @Tags         PaymentMethod
 // @Produce      json

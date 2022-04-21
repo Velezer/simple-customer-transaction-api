@@ -26,6 +26,45 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/customers": {
+            "get": {
+                "description": "get customers",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "get customers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models._Res"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Customer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models._Err"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "CreateCustomer.",
                 "produces": [
@@ -138,7 +177,7 @@ const docTemplate = `{
                 "tags": [
                     "Order"
                 ],
-                "summary": "get Orders, anyone can access",
+                "summary": "get Orders",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -177,7 +216,7 @@ const docTemplate = `{
                 "tags": [
                     "Order"
                 ],
-                "summary": "Create Order, user role must be MERCHANT",
+                "summary": "Create Order",
                 "parameters": [
                     {
                         "description": "the body to create a Order",
@@ -232,7 +271,7 @@ const docTemplate = `{
                 "tags": [
                     "PaymentMethod"
                 ],
-                "summary": "get PaymentMethods, anyone can access",
+                "summary": "get PaymentMethods",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -271,7 +310,7 @@ const docTemplate = `{
                 "tags": [
                     "PaymentMethod"
                 ],
-                "summary": "Create PaymentMethod, user role must be MERCHANT",
+                "summary": "Create PaymentMethod",
                 "parameters": [
                     {
                         "description": "the body to create a PaymentMethod",
@@ -326,7 +365,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "get products, anyone can access",
+                "summary": "get products",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -365,7 +404,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Create Product, user role must be MERCHANT",
+                "summary": "Create Product",
                 "parameters": [
                     {
                         "description": "the body to create a Product",
@@ -487,6 +526,23 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                }
+            }
+        },
+        "models.Customer": {
+            "type": "object",
+            "properties": {
+                "customerAddresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.CustomerAddress"
+                    }
+                },
+                "customer_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },

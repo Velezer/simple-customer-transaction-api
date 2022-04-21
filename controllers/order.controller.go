@@ -21,7 +21,7 @@ type OrderInput struct {
 }
 
 // CreateOrder godoc
-// @Summary      Create Order, user role must be MERCHANT
+// @Summary      Create Order
 // @Description  create Order
 // @Tags         Order
 // @Param        Body  body  OrderInput  true  "the body to create a Order"
@@ -71,7 +71,7 @@ func (h OrderController) CreateOrder(c *gin.Context) {
 }
 
 // GetOrders godoc
-// @Summary      get Orders, anyone can access
+// @Summary      get Orders
 // @Description  get Orders
 // @Tags         Order
 // @Produce      json
