@@ -11,7 +11,7 @@ type order struct {
 }
 
 func (s order) Save(m *models.Order) (*models.Order, error) {
-	err := s.Db.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&m).Error
+	err := s.Db.Create(&m).Error
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func (s order) Save(m *models.Order) (*models.Order, error) {
 }
 
 func (s order) FindAll() (ms *[]models.Order, err error) {
-	err = s.Db.Find(&ms).Error
+	err = s.Db.Preload("Products").Preload("PaymentMethods").Find(&ms).Error
 	if err != nil {
 		return nil, err
 	}
